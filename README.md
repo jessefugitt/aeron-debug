@@ -36,7 +36,7 @@ java -javaagent:3rdParty/libs/aspectjweaver-1.8.6.jar -cp samples.jar;3rdParty/l
 
 
 ### Trace Logging - slf4j
-The second artifact, aeron-logging-slf4j-0.0.1.jar ((https://github.com/jessefugitt/aeron-debug/releases/download/v0.0.1/aeron-logging-slf4j-0.0.1.jar), uses the [slf4j](http://www.slf4j.org/) api at the TRACE logging level to log the information.  This allows many different logging implementations (log4j, java util logging, etc) to do the actual logging and choose whether to output the results to the console and/or a file and allows an existing Java application that is already using slf4j to pick up the Aeron logging results as if the Aeron library contained actual log statements.
+The second artifact, [aeron-logging-slf4j-0.0.1.jar] (https://github.com/jessefugitt/aeron-debug/releases/download/v0.0.1/aeron-logging-slf4j-0.0.1.jar), uses the [slf4j](http://www.slf4j.org/) api at the TRACE logging level to log the information.  This allows many different logging implementations (log4j, java util logging, etc) to do the actual logging and choose whether to output the results to the console and/or a file and allows an existing Java application that is already using slf4j to pick up the Aeron logging results as if the Aeron library contained actual log statements.
 
 First, build Aeron and cd to the folder with the samples.jar (super jar containing Aeron/Agrona jars).  Download the aeron-logging-slf4j jar. Extract the aeron-debug 3rdParty.zip.  Then, run the following command to make sure everything works without logging:
 ```
