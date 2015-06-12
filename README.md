@@ -7,13 +7,13 @@ Since Aeron does not implement any standard debug logging, a supplementary tool 
 The high level usage is straightforward and involves adding a few additional jars to the classpath and specifying a -javaagent on the command line when starting a Java process.  For example, if trace logging to stdout is needed on an Aeron MediaDriver process the command line would change from:
 
 ```
-java -cp /path/to/agrona/*:/path/to/aeronjars/* uk.co.real_logic.aeron.driver.MediaDriver
+java -cp /path/to/aeronjars/* uk.co.real_logic.aeron.driver.MediaDriver
 ```
 
 to
 
 ```
-java -javaagent:/path/to/aspectjweaver-1.8.6.jar -cp /path/to/agrona/*:/path/to/aeron-jars/*:/path/to/aspectj-jars/*:/path/to/aeron-logging-jar uk.co.real_logic.aeron.driver.MediaDriver
+java -javaagent:/path/to/aspectjweaver-1.8.6.jar -cp /path/to/aeron-jars/*:/path/to/aspectj-jars/*:/path/to/aeron-logging-jar uk.co.real_logic.aeron.driver.MediaDriver
 ```
 
 In version 0.0.1, there are two aeron-debug logging artifacts that can be used and both intercept calls to Aeron methods and print the method name and argument values when used with the aspectjweaver java agent.  One is a simple "print to stdout" implementation and the other is for intergrating with existing java logging frameworks at a TRACE log level.
@@ -24,10 +24,31 @@ Download the aspectj and other third party jars from the aeron-debug Releases pa
 ### Trace Logging - stdout
 The first artifact, [aeron-logging-stdout-0.0.1.jar] (https://github.com/jessefugitt/aeron-debug/releases/download/v0.0.1/aeron-logging-stdout-0.0.1.jar), simply prints the information directly to stdout and doesn't depend on any additional jars besides aspectj.
 
+First, build Aeron and cd to the folder with the samples.jar (super jar containing Aeron/Agrona jars).  Download the aeron-logging-stdout jar. Extract the aeron-debug 3rdParty.zip.  Then, run the following command to make sure everything works without logging:
+```
+java -cp samples.jar uk.co.real_logic.aeron.driver.MediaDriver
+```
+
+Finally, run the following command to try stdout logging:
+```
+java -javaagent:3rdParty/libs/aspectjweaver-1.8.6.jar -cp samples.jar;3rdParty/libs/aspectjrt-1.8.6.jar;3rdParty/libs/aspectjweaver-1.8.6.jar;aeron-logging-stdout-0.0.1.jar uk.co.real_logic.aeron.driver.MediaDriver
+```
 
 
 ### Trace Logging - slf4j
 The second artifact, aeron-logging-slf4j-0.0.1.jar ((https://github.com/jessefugitt/aeron-debug/releases/download/v0.0.1/aeron-logging-slf4j-0.0.1.jar), uses the [slf4j](http://www.slf4j.org/) api at the TRACE logging level to log the information.  This allows many different logging implementations (log4j, java util logging, etc) to do the actual logging and choose whether to output the results to the console and/or a file and allows an existing Java application that is already using slf4j to pick up the Aeron logging results as if the Aeron library contained actual log statements.
+
+First, build Aeron and cd to the folder with the samples.jar (super jar containing Aeron/Agrona jars).  Download the aeron-logging-slf4j jar. Extract the aeron-debug 3rdParty.zip.  Then, run the following command to make sure everything works without logging:
+```
+java -cp samples.jar uk.co.real_logic.aeron.driver.MediaDriver
+```
+
+Finally, run the following command to try slf4j logging with log4j2:
+```
+java -javaagent:3rdParty/libs/aspectjweaver-1.8.6.jar -cp samples.jar;3rdParty/libs/aspectjrt-1.8.6.jar;3rdParty/libs/aspectjweaver-1.8.6.jar;3rdParty/libs/slf4j-log4j2/*;3rdParty/libs/slf4j-log4j2;aeron-logging-slf4j-0.0.1.jar uk.co.real_logic.aeron.driver.MediaDriver
+```
+
+This will pick up slf4j-api and the log4j2 impl jars on the classpath via 3rdParty/libs/slf4j-log4j2/*.  It will also pick up a sample log4j2.xml file that does console and file logging from the classpath via 3rdParty/libs/slf4j-log4j2.
 
 ### Gradle/Maven Repo
 The v0.0.1 release currently only exists in a github hosted maven repository here:
